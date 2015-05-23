@@ -1,0 +1,6 @@
+[submodule "lua-enet"]
+	path = lua-enet
+	url = https://github.com/leafo/lua-enet.git
+[submodule "enet"]
+	path = enet
+	url = https://github.com/lsalzman/enet.git

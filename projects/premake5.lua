@@ -14,10 +14,7 @@ include(gmcommon)
 CreateSolution("enet")
 	CreateProject(SERVERSIDE)
 		includedirs({"../enet/include"})
-		vpaths({
-			["enet"] = "../enet/*.c",
-			["lua-enet"] = "../lua-enet/*.c"
-		})
+		vpaths({["enet"] = "../enet/*.c"})
 		files({
 			"../enet/callbacks.c",
 			"../enet/compress.c",
@@ -25,8 +22,7 @@ CreateSolution("enet")
 			"../enet/list.c",
 			"../enet/packet.c",
 			"../enet/peer.c",
-			"../enet/protocol.c",
-			"../lua-enet/enet.c"
+			"../enet/protocol.c"
 		})
 		IncludeLuaShared()
 
@@ -39,10 +35,7 @@ CreateSolution("enet")
 
 	CreateProject(CLIENTSIDE)
 		includedirs({"../enet/include"})
-		vpaths({
-			["enet"] = "../enet/*.c",
-			["lua-enet"] = "../lua-enet/*.c"
-		})
+		vpaths({["enet"] = "../enet/*.c"})
 		files({
 			"../enet/callbacks.c",
 			"../enet/compress.c",
@@ -50,8 +43,7 @@ CreateSolution("enet")
 			"../enet/list.c",
 			"../enet/packet.c",
 			"../enet/peer.c",
-			"../enet/protocol.c",
-			"../lua-enet/enet.c"
+			"../enet/protocol.c"
 		})
 		IncludeLuaShared()
 

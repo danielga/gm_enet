@@ -31,6 +31,18 @@ CreateSolution("enet")
 			links({"ws2_32", "winmm"})
 
 		SetFilter(FILTER_LINUX, FILTER_MACOSX)
+			defines({
+				"HAS_GETADDRINFO",
+				"HAS_GETNAMEINFO",
+				"HAS_GETHOSTBYADDR_R",
+				"HAS_GETHOSTBYNAME_R",
+				"HAS_POLL",
+				"HAS_FCNTL",
+				"HAS_INET_PTON",
+				"HAS_INET_NTOP",
+				"HAS_MSGHDR_FLAGS",
+				"HAS_SOCKLEN_T"
+			})
 			files({"../enet/unix.c"})
 
 	CreateProject(CLIENTSIDE)
@@ -52,4 +64,16 @@ CreateSolution("enet")
 			links({"ws2_32", "winmm"})
 
 		SetFilter(FILTER_LINUX, FILTER_MACOSX)
+			defines({
+				"HAS_GETADDRINFO",
+				"HAS_GETNAMEINFO",
+				"HAS_GETHOSTBYADDR_R",
+				"HAS_GETHOSTBYNAME_R",
+				"HAS_POLL",
+				"HAS_FCNTL",
+				"HAS_INET_PTON",
+				"HAS_INET_NTOP",
+				"HAS_MSGHDR_FLAGS",
+				"HAS_SOCKLEN_T"
+			})
 			files({"../enet/unix.c"})

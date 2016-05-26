@@ -1,36 +1,28 @@
 newoption({
 	trigger = "gmcommon",
-	description = "Sets the path to the garrysmod_common (https://bitbucket.org/danielga/garrysmod_common) directory",
-	value = "path to garrysmod_common dir"
+	description = "Sets the path to the garrysmod_common (https://github.com/danielga/garrysmod_common) directory",
+	value = "path to garrysmod_common directory"
 })
 
 local gmcommon = _OPTIONS.gmcommon or os.getenv("GARRYSMOD_COMMON")
 if gmcommon == nil then
-	error("you didn't provide a path to your garrysmod_common (https://bitbucket.org/danielga/garrysmod_common) directory")
+	error("you didn't provide a path to your garrysmod_common (https://github.com/danielga/garrysmod_common) directory")
 end
 
 include(gmcommon)
 
-CreateSolution("enet")
-	CreateProject(SERVERSIDE)
-		includedirs({"../enet/include"})
-		vpaths({["enet"] = "../enet/*.c"})
-		files({
-			"../enet/callbacks.c",
-			"../enet/compress.c",
-			"../enet/host.c",
-			"../enet/list.c",
-			"../enet/packet.c",
-			"../enet/peer.c",
-			"../enet/protocol.c"
-		})
+local ENET_DIRECTORY = "../enet"
+
+CreateWorkspace({name = "enet"})
+	CreateProject({serverside = true})
+		includedirs(ENET_DIRECTORY .. "/include")
+		links("enet")
 		IncludeLuaShared()
 
-		SetFilter(FILTER_WINDOWS)
-			files({"../enet/win32.c"})
+		filter("system:windows")
 			links({"ws2_32", "winmm"})
 
-		SetFilter(FILTER_LINUX, FILTER_MACOSX)
+		filter("system:linux or macosx")
 			defines({
 				"HAS_GETADDRINFO",
 				"HAS_GETNAMEINFO",
@@ -43,27 +35,16 @@ CreateSolution("enet")
 				"HAS_MSGHDR_FLAGS",
 				"HAS_SOCKLEN_T"
 			})
-			files({"../enet/unix.c"})
 
-	CreateProject(CLIENTSIDE)
-		includedirs({"../enet/include"})
-		vpaths({["enet"] = "../enet/*.c"})
-		files({
-			"../enet/callbacks.c",
-			"../enet/compress.c",
-			"../enet/host.c",
-			"../enet/list.c",
-			"../enet/packet.c",
-			"../enet/peer.c",
-			"../enet/protocol.c"
-		})
+	CreateProject({serverside = false})
+		includedirs(ENET_DIRECTORY .. "/include")
+		links("enet")
 		IncludeLuaShared()
 
-		SetFilter(FILTER_WINDOWS)
-			files({"../enet/win32.c"})
+		filter("system:windows")
 			links({"ws2_32", "winmm"})
 
-		SetFilter(FILTER_LINUX, FILTER_MACOSX)
+		filter("system:linux or macosx")
 			defines({
 				"HAS_GETADDRINFO",
 				"HAS_GETNAMEINFO",
@@ -76,4 +57,39 @@ CreateSolution("enet")
 				"HAS_MSGHDR_FLAGS",
 				"HAS_SOCKLEN_T"
 			})
-			files({"../enet/unix.c"})
+
+	project("enet")
+		kind("StaticLib")
+		includedirs(ENET_DIRECTORY .. "/include")
+		vpaths({
+			["Header files"] = ENET_DIRECTORY .. "/**.h",
+			["Source files"] = ENET_DIRECTORY .. "/**.c"
+		})
+		files({
+			ENET_DIRECTORY .. "/callbacks.c",
+			ENET_DIRECTORY .. "/compress.c",
+			ENET_DIRECTORY .. "/host.c",
+			ENET_DIRECTORY .. "/list.c",
+			ENET_DIRECTORY .. "/packet.c",
+			ENET_DIRECTORY .. "/peer.c",
+			ENET_DIRECTORY .. "/protocol.c"
+		})
+
+		filter("system:windows")
+			files(ENET_DIRECTORY .. "/win32.c")
+			links({"ws2_32", "winmm"})
+
+		filter("system:linux or macosx")
+			defines({
+				"HAS_GETADDRINFO",
+				"HAS_GETNAMEINFO",
+				"HAS_GETHOSTBYADDR_R",
+				"HAS_GETHOSTBYNAME_R",
+				"HAS_POLL",
+				"HAS_FCNTL",
+				"HAS_INET_PTON",
+				"HAS_INET_NTOP",
+				"HAS_MSGHDR_FLAGS",
+				"HAS_SOCKLEN_T"
+			})
+			files(ENET_DIRECTORY .. "/unix.c")
